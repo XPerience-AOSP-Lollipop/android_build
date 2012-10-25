@@ -349,6 +349,21 @@ def BuildBootableImage(sourcedir, fs_config_file, info_dict=None):
     cmd.append("--base")
     cmd.append(open(fn).read().rstrip("\n"))
 
+  fn = os.path.join(sourcedir, "tagsaddr")
+  if os.access(fn, os.F_OK):
+    cmd.append("--tags-addr")
+    cmd.append(open(fn).read().rstrip("\n"))
+
+  fn = os.path.join(sourcedir, "ramdisk_offset")
+  if os.access(fn, os.F_OK):
+    cmd.append("--ramdisk_offset")
+    cmd.append(open(fn).read().rstrip("\n"))
+
+  fn = os.path.join(sourcedir, "dt_args")
+  if os.access(fn, os.F_OK):
+    cmd.append("--dt")
+    cmd.append(open(fn).read().rstrip("\n"))
+
   fn = os.path.join(sourcedir, "pagesize")
   if os.access(fn, os.F_OK):
     cmd.append("--pagesize")
@@ -358,15 +373,8 @@ def BuildBootableImage(sourcedir, fs_config_file, info_dict=None):
   if args and args.strip():
     cmd.extend(shlex.split(args))
 
-  img_unsigned = None
-  if info_dict.get("vboot", None):
-    img_unsigned = tempfile.NamedTemporaryFile()
-    cmd.extend(["--ramdisk", ramdisk_img.name,
-                "--output", img_unsigned.name])
-  else:
-    cmd.extend(["--ramdisk", ramdisk_img.name,
-                "--output", img.name])
-
+  cmd.extend(["--ramdisk", ramdisk_img.name,
+              "--output", img.name])
   p = Run(cmd, stdout=subprocess.PIPE)
   p.communicate()
   assert p.returncode == 0, "mkbootimg of %s image failed" % (

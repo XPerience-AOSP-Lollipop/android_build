@@ -291,19 +291,19 @@ function settitle()
 
 function addcompletions()
 {
-    local T dir f
-
     # Keep us from trying to run in something that isn't bash.
     if [ -z "${BASH_VERSION}" ]; then
         return
     fi
 
     # Keep us from trying to run in bash that's too old.
-    if [ ${BASH_VERSINFO[0]} -lt 3 ]; then
+    if [ "${BASH_VERSINFO[0]}" -lt 4 ] ; then
         return
     fi
 
-    dirs="sdk/bash_completion vendor/XPe/bash_completion"
+    local T dir f
+
+dirs="sdk/bash_completion vendor/XPe/bash_completion"
     for dir in $dirs; do
     if [ -d ${dir} ]; then
         for f in `/bin/ls ${dir}/[a-z]*.bash 2> /dev/null`; do

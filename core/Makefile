@@ -974,6 +974,10 @@ ifdef BOARD_KERNEL_PAGESIZE
   INTERNAL_RECOVERYIMAGE_ARGS += --pagesize $(BOARD_KERNEL_PAGESIZE)
 endif
 
+INTERNAL_RECOVERY_FILES := $(filter $(TARGET_RECOVERY_OUT)/%, \
+        $(foreach module, $(ALL_MODULES), $(ALL_MODULES.$(module).INSTALLED)) \
+        $(ALL_DEFAULT_INSTALLED_MODULES)))
+
 # Keys authorized to sign OTA packages this build will accept.  The
 # build always uses dev-keys for this; release packaging tools will
 # substitute other keys for this one.

@@ -1,6 +1,6 @@
-#!/bin/sh
+#!/bin/bash
 
-# Copyright (C) 2014 The OmniROM Project
+# Copyright (C) 2014 The MoKee OpenSource Project
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -15,11 +15,19 @@
 # limitations under the License.
 
 # This works, but there has to be a better way of reliably getting the root build directory...
+if [ $# -eq 1 ]; then
     TOP=$1
-    DEVICE=falcon
+    DEVICE=$TARGET_DEVICE
+elif [ -n "$(gettop)" ]; then
+    TOP=$(gettop)
+    DEVICE=$TARGET_DEVICE
+else
+    echo "Please run envsetup.sh and lunch before running this script,"
+    echo "or provide the build root directory as the first parameter."
+    return 1
+fi
 
-
-TARGET_DIR=/home/klozz/android/XPerience-AOSP-Lollipop/out/target/product/falcon/
+TARGET_DIR=$OUT
 PREBUILT_DIR=$TOP/prebuilts/chromium/$DEVICE
 
 if [ -d $PREBUILT_DIR ]; then
@@ -27,26 +35,24 @@ if [ -d $PREBUILT_DIR ]; then
 fi
 
 mkdir -p $PREBUILT_DIR
-mkdir -p $PREBUILT_DIR/app/webview
-mkdir -p $PREBUILT_DIR/app/webview/lib/arm
+mkdir -p $PREBUILT_DIR/lib
 
 if [ -d $TARGET_DIR ]; then
     echo "Copying files..."
-    cp -r $TARGET_DIR/system/app/webview $PREBUILT_DIR/app/webview
-    cp $TARGET_DIR/system/lib/libwebviewchromium.so $PREBUILT_DIR/lib/libwebviewchromium.so
-    ls $TARGET_DIR/system/lib/libwebviewchromium.so $PREBUILT_DIR/app/webview/lib/arm/libwebviewchromium.so
-#    cp $TARGET_DIR/../../common/obj/JAVA_LIBRARIES/android_webview_java_intermediates/javalib.jar $PREBUILT_DIR/android_webview_java.jar
+    cp -r $TARGET_DIR/system/app/webview $PREBUILT_DIR
+    rm -r $PREBUILT_DIR/webview/lib
+    cp $TARGET_DIR/system/lib/libwebviewchromium*.so $PREBUILT_DIR/lib
 else
     echo "Please ensure that you have ran a full build prior to running this script!"
-    return 1;
+    exit 1;
 fi
 
 echo "Generating Makefiles..."
 
-HASH=$(git --git-dir=$TOP/external/chromium/.git --work-tree=$TOP/external/chromium rev-parse --verify HEAD)
+HASH=$(git --git-dir=$TOP/external/chromium_org/.git --work-tree=$TOP/external/chromium_org rev-parse --verify HEAD)
 echo $HASH > $PREBUILT_DIR/hash.txt
 
-(cat << EOF) | sed s/__DEVICE__/$DEVICE/g > $PREBUILT_DIR/chromium_prebuilt.mk
+cat > $PREBUILT_DIR/chromium_prebuilt.mk <<EOF
 # Copyright (C) 2014 The XPerience Project
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -61,12 +67,13 @@ echo $HASH > $PREBUILT_DIR/hash.txt
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-LOCAL_PATH := prebuilts/chromium/__DEVICE__/
+LOCAL_PATH := prebuilts/chromium/$DEVICE
+
+STUB := \$(shell mkdir -p out/target/product/$DEVICE/system/app/webview/lib/arm;ln -sf /system/lib/libwebviewchromium.so out/target/product/$DEVICE/system/app/webview/lib/arm/libwebviewchromium.so)
 
 PRODUCT_COPY_FILES += \\
-    \$(LOCAL_PATH)/app/webview/webview.apk:system/app/webview/webview.apk \\
-    \$(LOCAL_PATH)/app/webview/lib/arm/libwebviewchromium.so:system/app/webview/lib/arm/libwebviewchromium.so \\
-    \$(LOCAL_PATH)/lib/libwebviewchromium.so:system/lib/libwebviewchromium.so
+    \$(call find-copy-subdir-files,*,\$(LOCAL_PATH)/webview,system/app/webview) \\
+    \$(call find-copy-subdir-files,*,\$(LOCAL_PATH)/lib,system/lib)
 
 EOF
 

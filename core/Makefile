@@ -1634,6 +1634,9 @@ ifneq ($(TARGET_UNIFIED_DEVICE),)
     endif
 endif
 
+BOOT_ZIP_FROM_IMAGE_SCRIPT := ./build/tools/releasetools/boot_flash_from_image
+KERNEL_PATH := $(TARGET_KERNEL_SOURCE)/arch/arm/configs/$(TARGET_KERNEL_CONFIG)
+
 $(INTERNAL_OTA_PACKAGE_TARGET): $(BUILT_TARGET_FILES_PACKAGE) $(DISTTOOLS)
 	@echo "$(OTA_FROM_TARGET_SCRIPT)" > $(PRODUCT_OUT)/ota_script_path
 	@echo "$(override_device)" > $(PRODUCT_OUT)/ota_override_device
@@ -1650,8 +1653,14 @@ $(INTERNAL_OTA_PACKAGE_TARGET): $(BUILT_TARGET_FILES_PACKAGE) $(DISTTOOLS)
 
 CM_TARGET_PACKAGE := $(PRODUCT_OUT)/xpe_$(CM_VERSION).zip
 
-.PHONY: otapackage bacon
+.PHONY: otapackage bacon bootzip
 otapackage: $(INTERNAL_OTA_PACKAGE_TARGET)
+bootzip: bootimage
+	$(BOOT_ZIP_FROM_IMAGE_SCRIPT) \
+	$(recovery_fstab) \
+	$(OUT) \
+	$(TARGET_DEVICE)
+	
 bacon: otapackage
 	$(hide) ln -f $(INTERNAL_OTA_PACKAGE_TARGET) $(CM_TARGET_PACKAGE)
 	$(hide) $(MD5SUM) $(CM_TARGET_PACKAGE) > $(CM_TARGET_PACKAGE).md5sum
@@ -1663,7 +1672,7 @@ bacon: otapackage
 	@echo -e ${CL_MAG}"# ((_)\ /(_))\  /(_))(_))\ ((_)\ (((_)_( )\  #"${CL_MAG}
 	@echo -e ${CL_MAG}"# (__((_|_))((_)(_))(_))((_) _((_))\___((_)  #"${CL_MAG}
 	@echo -e ${CL_MAG}"# \ \/ / _ \ __| _ \_ _| __| \| ((/ __| __|  #"${CL_MAG}
-	@echo -e ${CL_MAG}"#  >  <|  _/ _||   /| || _|| .` || (__| _|   #"${CL_MAG}
+	@echo -e ${CL_MAG}"#  >  <|  _/ _||   /| || _|| .  || (__| _|   #"${CL_MAG}
 	@echo -e ${CL_MAG}"# /_/\_\_| |___|_|_\___|___|_|\_| \___|___|  #"${CL_MAG}
 	@echo -e ${CL_MAG}"#      (C)2014 The XPerience Project         #"${CL_MAG}
 	@echo -e ${CL_MAG}"#              By Klozz Jesus                #"${CL_MAG}

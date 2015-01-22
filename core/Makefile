@@ -1694,7 +1694,7 @@ bacon: otapackage
 	@echo -e ${CL_MAG}"# \ \/ / _ \ __| _ \_ _| __| \| ((/ __| __|  #"${CL_MAG}
 	@echo -e ${CL_MAG}"#  >  <|  _/ _||   /| || _|| .  || (__| _|   #"${CL_MAG}
 	@echo -e ${CL_MAG}"# /_/\_\_| |___|_|_\___|___|_|\_| \___|___|  #"${CL_MAG}
-	@echo -e ${CL_MAG}"#      (C)2014 The XPerience Project         #"${CL_MAG}
+	@echo -e ${CL_MAG}"#      (C)2015 The XPerience Project         #"${CL_MAG}
 	@echo -e ${CL_MAG}"#              By Klozz Jesus                #"${CL_MAG}
 	@echo -e ${CL_MAG}"##############################################"${CL_MAG}
 	@echo -e ${CL_MAG}""${CL_MAG}

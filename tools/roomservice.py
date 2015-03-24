@@ -1,5 +1,9 @@
 #!/usr/bin/env python
+<<<<<<< HEAD
 # Copyright (C) 2012-2013, The XPerience Project
+=======
+# Copyright (C) 2012-2013, The CyanogenMod Project
+>>>>>>> nxt/staging/cm-12.1
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -51,7 +55,11 @@ except:
     device = product
 
 if not depsonly:
+<<<<<<< HEAD
     print("Device %s not found. Attempting to retrieve device repository from XPerience Github (http://github.com/XPerience-AOSP-Lollipop)." % device)
+=======
+    print("Device %s not found. Attempting to retrieve device repository from CyanogenMod Github (http://github.com/CyanogenMod)." % device)
+>>>>>>> nxt/staging/cm-12.1
 
 repositories = []
 
@@ -70,7 +78,11 @@ def add_auth(githubreq):
         githubreq.add_header("Authorization","Basic %s" % githubauth)
 
 if not depsonly:
+<<<<<<< HEAD
     githubreq = urllib.request.Request("https://api.github.com/search/repositories?q=%s+user:XPerience-AOSP-Lollipop+in:name+fork:true" % device)
+=======
+    githubreq = urllib.request.Request("https://api.github.com/search/repositories?q=%s+user:CyanogenMod+in:name+fork:true" % device)
+>>>>>>> nxt/staging/cm-12.1
     add_auth(githubreq)
     try:
         result = json.loads(urllib.request.urlopen(githubreq).read().decode())
@@ -173,12 +185,21 @@ def add_to_manifest(repositories, fallback_branch = None):
         repo_name = repository['repository']
         repo_target = repository['target_path']
         if exists_in_tree(lm, repo_name):
+<<<<<<< HEAD
             print('XPerience/%s already exists' % (repo_name))
             continue
 
         print('Adding dependency: XPerience%s -> %s' % (repo_name, repo_target))
         project = ElementTree.Element("project", attrib = { "path": repo_target,
             "remote": "github", "name": "XPerience-AOSP-Lollipop/%s" % repo_name })
+=======
+            print('CyanogenMod/%s already exists' % (repo_name))
+            continue
+
+        print('Adding dependency: CyanogenMod/%s -> %s' % (repo_name, repo_target))
+        project = ElementTree.Element("project", attrib = { "path": repo_target,
+            "remote": "github", "name": "CyanogenMod/%s" % repo_name })
+>>>>>>> nxt/staging/cm-12.1
 
         if 'branch' in repository:
             project.set('revision',repository['branch'])
@@ -200,7 +221,11 @@ def add_to_manifest(repositories, fallback_branch = None):
 
 def fetch_dependencies(repo_path, fallback_branch = None):
     print('Looking for dependencies')
+<<<<<<< HEAD
     dependencies_path = repo_path + '/xpe.dependencies'
+=======
+    dependencies_path = repo_path + '/cm.dependencies'
+>>>>>>> nxt/staging/cm-12.1
     syncable_repos = []
 
     if os.path.exists(dependencies_path):
@@ -209,7 +234,11 @@ def fetch_dependencies(repo_path, fallback_branch = None):
         fetch_list = []
 
         for dependency in dependencies:
+<<<<<<< HEAD
             if not is_in_manifest("XPerience/%s" % dependency['repository']):
+=======
+            if not is_in_manifest("CyanogenMod/%s" % dependency['repository']):
+>>>>>>> nxt/staging/cm-12.1
                 fetch_list.append(dependency)
                 syncable_repos.append(dependency['target_path'])
 
@@ -292,4 +321,8 @@ else:
             print("Done")
             sys.exit()
 
+<<<<<<< HEAD
 print("Repository for %s not found in the XPerience Github repository list. If this is in error, you may need to manually add it to your local_manifests/roomservice.xml." % device)
+=======
+print("Repository for %s not found in the CyanogenMod Github repository list. If this is in error, you may need to manually add it to your local_manifests/roomservice.xml." % device)
+>>>>>>> nxt/staging/cm-12.1

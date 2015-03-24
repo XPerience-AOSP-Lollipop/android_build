@@ -885,8 +885,7 @@ ifneq ($(OTA_PACKAGE_SIGNING_KEY),)
 else
     PRODUCT_EXTRA_RECOVERY_KEYS += \
         build/target/product/security/cm \
-        build/target/product/security/cm-devkey \
-        build/target/product/security/bacon
+        build/target/product/security/cm-devkey
 endif
 
 # Generate a file containing the keys that will be read by the
@@ -1451,6 +1450,8 @@ $(BUILT_TARGET_FILES_PACKAGE): \
 	$(hide) mkdir -p $(zip_root)/RECOVERY
 	$(hide) $(call package_files-copy-root, \
 		$(TARGET_RECOVERY_ROOT_OUT),$(zip_root)/RECOVERY/RAMDISK)
+	@# OTA install helpers
+	$(hide) $(call package_files-copy-root, $(OUT)/install, $(zip_root)/INSTALL)
 ifdef INSTALLED_KERNEL_TARGET
 	$(hide) $(ACP) $(INSTALLED_KERNEL_TARGET) $(zip_root)/RECOVERY/kernel
 endif

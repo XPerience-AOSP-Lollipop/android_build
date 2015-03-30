@@ -1690,12 +1690,26 @@ otapackage: $(INTERNAL_OTA_PACKAGE_TARGET)
 bacon: otapackage
 	$(hide) ln -f $(INTERNAL_OTA_PACKAGE_TARGET) $(CM_TARGET_PACKAGE)
 	$(hide) $(MD5SUM) $(CM_TARGET_PACKAGE) > $(CM_TARGET_PACKAGE).md5sum
+	@echo -e ${CL_BLU}""${CL_BLU}
+	@echo -e ${CL_MAG}"##############################################"${CL_MAG}
+	@echo -e ${CL_MAG}"#     ) (       (   (          )             #"${CL_MAG}
+	@echo -e ${CL_MAG}"#  ( /( )\ )    )\ ))\ )    ( /(   (         #"${CL_MAG}
+	@echo -e ${CL_MAG}"#  )\()|()/((  (()/(()/((   )\())  )\   (    #"${CL_MAG}
+	@echo -e ${CL_MAG}"# ((_)\ /(_))\  /(_))(_))\ ((_)\ (((_)_( )\  #"${CL_MAG}
+	@echo -e ${CL_MAG}"# (__((_|_))((_)(_))(_))((_) _((_))\___((_)  #"${CL_MAG}
+	@echo -e ${CL_MAG}"# \ \/ / _ \ __| _ \_ _| __| \| ((/ __| __|  #"${CL_MAG}
+	@echo -e ${CL_MAG}"#  >  <|  _/ _||   /| || _|| .' || (__| _|   #"${CL_MAG}
+	@echo -e ${CL_MAG}"# /_/\_\_| |___|_|_\___|___|_|\_| \___|___|  #"${CL_MAG}
+	@echo -e ${CL_MAG}"#      (C)2015 The XPerience Project         #"${CL_MAG}
+	@echo -e ${CL_MAG}"#              By Klozz Jesus                #"${CL_MAG}
+	@echo -e ${CL_MAG}"##############################################"${CL_MAG}
+	@echo -e ${CL_MAG}""${CL_MAG}
 	@echo -e ${CL_CYN}"Package Complete: $(CM_TARGET_PACKAGE)"${CL_RST}
 
 ifeq ($(XPERIENCE_CHANGELOG),true)
 # Generate changelog
- $(hide) ./vendor/XPe/tools/changelog
- $(hide) mv $(PRODUCT_OUT)/Changelog.txt $(PRODUCT_OUT)/$(CM_VERSION)-$(TARGET_DEVICE).txt
+	$(hide) ./vendor/XPe/tools/changelog
+	$(hide) mv $(PRODUCT_OUT)/Changelog.txt $(PRODUCT_OUT)/$(CM_VERSION)-$(TARGET_PRODUCT).txt
 endif
 
 endif    # recovery_fstab is defined

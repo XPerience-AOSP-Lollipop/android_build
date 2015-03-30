@@ -1692,6 +1692,12 @@ bacon: otapackage
 	$(hide) $(MD5SUM) $(CM_TARGET_PACKAGE) > $(CM_TARGET_PACKAGE).md5sum
 	@echo -e ${CL_CYN}"Package Complete: $(CM_TARGET_PACKAGE)"${CL_RST}
 
+ifeq ($(XPERIENCE_CHANGELOG),true)
+# Generate changelog
+ $(hide) ./vendor/XPe/tools/changelog
+ $(hide) mv $(PRODUCT_OUT)/Changelog.txt $(PRODUCT_OUT)/$(CM_VERSION)-$(TARGET_DEVICE).txt
+endif
+
 endif    # recovery_fstab is defined
 endif    # TARGET_NO_KERNEL != true
 endif    # TARGET_DEVICE != generic*

@@ -1956,6 +1956,12 @@ $(INTERNAL_FACTORY_PACKAGE_TARGET): $(BUILT_TARGET_FILES_PACKAGE) $(DISTTOOLS)
 .PHONY: factorypackage
 factorypackage: $(INTERNAL_FACTORY_PACKAGE_TARGET)
 
+ifeq ($(XPERIENCE_CHANGELOG),true)
+# Generate changelog
+	$(hide) ./vendor/XPe/tools/changelog
+	$(hide) mv $(PRODUCT_OUT)/Changelog.txt $(PRODUCT_OUT)/$(XPE_VERSION)-$(TARGET_PRODUCT).txt
+endif
+
 endif    # recovery_fstab is defined
 endif    # TARGET_NO_KERNEL != true
 endif    # TARGET_DEVICE != generic*

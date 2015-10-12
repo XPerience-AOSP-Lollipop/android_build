@@ -1613,10 +1613,10 @@ otapackage: $(INTERNAL_OTA_PACKAGE_TARGET)
 bacon: otapackage
 ifneq ($(TARGET_CUSTOM_RELEASETOOL),)
 	@echo -e ${CL_YLW}"Running custom releasetool..."${CL_RST}
-	$(hide) $(TARGET_CUSTOM_RELEASETOOL)
+	$(hide) OTAPACKAGE=$(PWD)/$(INTERNAL_OTA_PACKAGE_TARGET) $(TARGET_CUSTOM_RELEASETOOL)
 else
 	@echo -e ${CL_YLW}"Running releasetool..."${CL_RST}
-	$(hide) ./vendor/XPe/tools/squisher
+	$(hide) OTAPACKAGE=$(PWD)/$(INTERNAL_OTA_PACKAGE_TARGET) ./vendor/XPe/tools/squisher
 endif
 
 endif    # recovery_fstab is defined

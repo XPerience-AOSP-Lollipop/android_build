@@ -156,7 +156,7 @@ def create_manifest_project(url, directory,
     
     if project_exists:
         return None
-
+    
     dup_path = check_dup_path(directory)
     if not dup_path is None:
         write_to_manifest(
@@ -195,9 +195,9 @@ def write_to_manifest(manifest):
                        '<!--Please do not manually edit this file-->\n',
                        raw_xml])
         
-                       with open('/'.join([local_manifest_dir, "roomservice.xml"]), 'w') as f:
-                           f.write(raw_xml)
-                       print("wrote the new roomservice manifest")
+        with open('/'.join([local_manifest_dir, "roomservice.xml"]), 'w') as f:
+            f.write(raw_xml)
+                print("wrote the new roomservice manifest")
 
 
 def parse_device_from_manifest(device):
@@ -256,12 +256,12 @@ def create_dependency_manifest(dependencies):
                                           target_path,
                                           remote=remote,
                                           revision=revision)
-                                          if not project is None:
-                                              manifest = append_to_manifest(project)
-                                                  write_to_manifest(manifest)
-                                                      projects.append(target_path)
-                                                  if len(projects) > 0:
-                                                      os.system("repo sync --force-sync --no-clone-bundle %s" % " ".join(projects))
+            if not project is None:
+                manifest = append_to_manifest(project)
+                    write_to_manifest(manifest)
+                        projects.append(target_path)
+                            if len(projects) > 0:
+                                os.system("repo sync --force-sync --no-clone-bundle %s" % " ".join(projects))
 
 
 def fetch_dependencies(device):
@@ -290,11 +290,11 @@ def fetch_device(device):
     project = create_manifest_project(device_url,
                                       device_dir,
                                       remote=default_team_rem)
-                                      if not project is None:
-                                          manifest = append_to_manifest(project)
-                                              write_to_manifest(manifest)
-                                                  print("syncing the device config")
-                                                      os.system('repo sync --force-sync --no-clone-bundle %s' % device_dir)
+        if not project is None:
+            manifest = append_to_manifest(project)
+                write_to_manifest(manifest)
+                    print("syncing the device config")
+                        os.system('repo sync --force-sync --no-clone-bundle %s' % device_dir)
 
 
 if __name__ == '__main__':

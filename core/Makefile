@@ -979,8 +979,8 @@ ifneq ($(OTA_PACKAGE_SIGNING_KEY),)
     PRODUCT_EXTRA_RECOVERY_KEYS := $(DEFAULT_SYSTEM_DEV_CERTIFICATE)
 else
     PRODUCT_EXTRA_RECOVERY_KEYS += \
-        build/target/product/security/cm \
-        build/target/product/security/cm-devkey
+        build/target/product/security/xpe \
+        build/target/product/security/xpe-devkey
 endif
 
 # Generate a file containing the keys that will be read by the

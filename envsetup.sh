@@ -147,7 +147,7 @@ function check_product()
 
     if (echo -n $1 | grep -q -e "^xpe_") ; then
        XPE_BUILD=$(echo -n $1 | sed -e 's/^xpe_//g')
-       export BUILD_NUMBER=$((date +%s%N ; echo $XPE_BUILD; hostname) | openssl sha1 | sed -e 's/.*=//g; s/ //g' | cut -c1-10)
+#export BUILD_NUMBER=$((date +%s%N ; echo $XPE_BUILD; hostname) | openssl sha1 | sed -e 's/.*=//g; s/ //g' | cut -c1-10)
     else
        XPE_BUILD=
     fi

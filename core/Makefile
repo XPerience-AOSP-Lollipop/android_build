@@ -914,8 +914,8 @@ ifneq ($(OTA_PACKAGE_SIGNING_KEY),)
     PRODUCT_EXTRA_RECOVERY_KEYS := $(DEFAULT_SYSTEM_DEV_CERTIFICATE)
 else
     PRODUCT_EXTRA_RECOVERY_KEYS += \
-        build/target/product/security/cm \
-        build/target/product/security/cm-devkey \
+        build/target/product/security/xpe \
+        build/target/product/security/xpe-devkey \
         build/target/product/security/bacon
 endif
 
@@ -1901,7 +1901,7 @@ ifeq ($(TARGET_BUILD_TYPE),debug)
 endif
 name := $(name)-img-$(FILE_NAME_TAG)
 
-INTERNAL_UPDATE_PACKAGE_TARGET := $(PRODUCT_OUT)/$(name).zip
+INTERNAL_UPDATE_PACKAGE_TARGET := $(PRODUCT_OUT)/xpe_$(name).zip
 
 ifeq ($(TARGET_RELEASETOOL_IMG_FROM_TARGET_SCRIPT),)
     IMG_FROM_TARGET_SCRIPT := ./build/tools/releasetools/img_from_target_files

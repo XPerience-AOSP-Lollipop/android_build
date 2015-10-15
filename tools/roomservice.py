@@ -110,7 +110,7 @@ def indent(elem, level=0):
 
 def get_default_revision():
     m = ElementTree.parse(".repo/manifest.xml")
-    d = m.findall('default')[0]
+    d = m.findall('test')[0]
     r = d.get('revision')
     return r.replace('refs/heads/', '').replace('refs/tags/', '')
 
@@ -172,7 +172,6 @@ def add_to_manifest(repositories, fallback_branch = None):
     for repository in repositories:
         repo_name = repository['repository']
         repo_target = repository['target_path']
-        repo_revision = repository['revision_repo']
         if exists_in_tree(lm, repo_name):
             print('XPerience/%s already exists' % (repo_name))
             continue
@@ -213,7 +212,6 @@ def fetch_dependencies(repo_path, fallback_branch = None):
             if not is_in_manifest("XPerience-AOSP-Lollipop/%s" % dependency['repository']):
                 fetch_list.append(dependency)
                 syncable_repos.append(dependency['target_path'])
-                syncable_repos.append(dependency['repo_revision'])
 
         dependencies_file.close()
 

@@ -1036,6 +1036,11 @@ INTERNAL_SYSTEMIMAGE_FILES := $(filter $(TARGET_OUT)/%, \
     $(PDK_FUSION_SYSIMG_FILES) \
     $(RECOVERY_RESOURCE_ZIP))
 
+systemimage-squisher: $(INTERNAL_SYSTEMIMAGE_FILES)
+	@echo -e “Optimizing PNGs to shrink ROM Size!”
+	$(hide) APKCERTS=$(APKCERTS_FILE) ./vendor/XPe/tools/squisher
+
+.PHONY: systemimage-squisher
 
 FULL_SYSTEMIMAGE_DEPS := $(INTERNAL_SYSTEMIMAGE_FILES) $(INTERNAL_USERIMAGES_DEPS)
 # -----------------------------------------------------------------

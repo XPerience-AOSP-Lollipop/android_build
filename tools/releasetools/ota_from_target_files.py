@@ -643,10 +643,21 @@ else if get_stage("%(bcb_dev)s") == "3/3" then
   script.Print("# \ \/ / _ \ __| _ \_ _| __| \| ((/ __| __|  #");
   script.Print("#  >  <|  _/ _||   /| || _|| .` || (__| _|   #");
   script.Print("# /_/\_\_| |___|_|_\___|___|_|\_| \___|___|  #");
-  script.Print("#      (C)2015 The XPerience Project         #");
+  script.Print("#      (C)2016 The XPerience Project         #");
   script.Print("#              By Klozz Jesus                #");
   script.Print("##############################################");
-
+  build2 = GetBuildProp("ro.build.date", OPTIONS.info_dict)
+  script.Print("#   Compiled: %s   #"%(build2));
+  device = GetBuildProp("ro.xpe.device", OPTIONS.info_dict)
+  if GetBuildProp("ro.xpe.model", OPTIONS.info_dict) is not None:
+    model = GetBuildProp("ro.xpe.model", OPTIONS.info_dict)
+    script.Print("*   Device: %s (%s)                    #"%(model, device));
+    script.Print("##############################################");
+  else:
+    script.Print("*   Device: %s"%(device));
+    script.Print("##############################################");
+    
+    
   if "selinux_fc" in OPTIONS.info_dict:
     WritePolicyConfig(OPTIONS.info_dict["selinux_fc"], output_zip)
 

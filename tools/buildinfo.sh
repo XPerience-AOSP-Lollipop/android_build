@@ -60,5 +60,6 @@ fi
 echo "ro.build.characteristics=$TARGET_AAPT_CHARACTERISTICS"
 
 echo "ro.cm.device=$CM_DEVICE"
+echo "ro.xpe.device=$CM_DEVICE"
 
 echo "# end build properties"

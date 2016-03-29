@@ -1918,7 +1918,27 @@ otapackage: $(INTERNAL_OTA_PACKAGE_TARGET)
 bacon: otapackage
 	$(hide) ln -f $(INTERNAL_OTA_PACKAGE_TARGET) $(XPE_TARGET_PACKAGE)
 	$(hide) $(MD5SUM) $(XPE_TARGET_PACKAGE) > $(XPE_TARGET_PACKAGE).md5sum
+	@echo -e ${CL_BLU}""${CL_BLU}
+	@echo -e ${CL_MAG}"##############################################"${CL_MAG}
+	@echo -e ${CL_MAG}"#     ) (       (   (          )             #"${CL_MAG}
+	@echo -e ${CL_MAG}"#  ( /( )\ )    )\ ))\ )    ( /(   (         #"${CL_MAG}
+	@echo -e ${CL_MAG}"#  )\()|()/((  (()/(()/((   )\())  )\   (    #"${CL_MAG}
+	@echo -e ${CL_MAG}"# ((_)\ /(_))\  /(_))(_))\ ((_)\ (((_)_( )\  #"${CL_MAG}
+	@echo -e ${CL_MAG}"# (__((_|_))((_)(_))(_))((_) _((_))\___((_)  #"${CL_MAG}
+	@echo -e ${CL_MAG}"# \ \/ / _ \ __| _ \_ _| __| \| ((/ __| __|  #"${CL_MAG}
+	@echo -e ${CL_MAG}"#  >  <|  _/ _||   /| || _|| .' || (__| _|   #"${CL_MAG}
+	@echo -e ${CL_MAG}"# /_/\_\_| |___|_|_\___|___|_|\_| \___|___|  #"${CL_MAG}
+	@echo -e ${CL_MAG}"#      (C)2016 The XPerience Project         #"${CL_MAG}
+	@echo -e ${CL_MAG}"#              By Klozz Jesus                #"${CL_MAG}
+	@echo -e ${CL_MAG}"##############################################"${CL_MAG}
+	@echo -e ${CL_MAG}""${CL_MAG}
 	@echo -e ${CL_CYN}"Package Complete: $(XPE_TARGET_PACKAGE)"${CL_RST}
+	
+ifeq ($(XPERIENCE_CHANGELOG),true)
+# Generate changelog
+	$(hide) ./vendor/XPe/tools/changelog
+	$(hide) mv $(PRODUCT_OUT)/Changelog.txt $(PRODUCT_OUT)/$(XPE_VERSION)-$(TARGET_PRODUCT).txt
+endif
 
 bootzip: bootimage
 	$(BOOT_ZIP_FROM_IMAGE_SCRIPT) \
@@ -1954,12 +1974,6 @@ $(INTERNAL_FACTORY_PACKAGE_TARGET): $(BUILT_TARGET_FILES_PACKAGE) $(DISTTOOLS)
 
 .PHONY: factorypackage
 factorypackage: $(INTERNAL_FACTORY_PACKAGE_TARGET)
-
-ifeq ($(XPERIENCE_CHANGELOG),true)
-# Generate changelog
-	$(hide) ./vendor/XPe/tools/changelog
-	$(hide) mv $(PRODUCT_OUT)/Changelog.txt $(PRODUCT_OUT)/$(XPE_VERSION)-$(TARGET_PRODUCT).txt
-endif
 
 endif    # recovery_fstab is defined
 endif    # TARGET_NO_KERNEL != true

@@ -27,7 +27,7 @@ PRODUCT_PACKAGES += \
     DownloadProvider \
     HTMLViewer \
     MediaProvider \
-    PackageInstaller \
+    XPeriencePackageInstaller \
     SettingsProvider \
     Shell \
     StatementService \

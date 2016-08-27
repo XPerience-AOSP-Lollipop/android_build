@@ -1983,6 +1983,10 @@ else
 endif
 endif
 
+BOOT_ZIP_FROM_IMAGE_SCRIPT := ./build/tools/releasetools/boot_flash_from_image
+KERNEL_PATH := $(TARGET_KERNEL_SOURCE)/arch/arm/configs/$(TARGET_KERNEL_CONFIG)
+#BOOT_ZIP_OUT_FILE := XPerience-Kernel-$(DEVICE).zip
+
 ifeq ($(TARGET_OTA_ASSERT_DEVICE),)
     $(INTERNAL_OTA_PACKAGE_TARGET): override_device := auto
 else
@@ -2018,7 +2022,7 @@ $(INTERNAL_OTA_PACKAGE_TARGET): $(BUILT_TARGET_FILES_PACKAGE)
 XPE_TARGET_PACKAGE := $(PRODUCT_OUT)/xpe_$(XPE_VERSION).zip
 
 
-.PHONY: otapackage bacon
+.PHONY: otapackage bacon bootzip
 otapackage: $(INTERNAL_OTA_PACKAGE_TARGET)
 bacon: otapackage
 ifneq ($(TARGET_CUSTOM_RELEASETOOL),)
@@ -2028,7 +2032,13 @@ else
 	$(hide) ./vendor/XPe/tools/squisher
 endif
 
-endif    # build_ota_package
+endif    # build_oat_package
+
+bootzip: bootimage
+	$(BOOT_ZIP_FROM_IMAGE_SCRIPT) \
+	   $(recovery_fstab) \
+	   $(OUT) \
+	   $(TARGET_DEVICE)
 
 # -----------------------------------------------------------------
 # The factory package

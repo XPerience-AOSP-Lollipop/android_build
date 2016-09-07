@@ -128,20 +128,20 @@ def combine_notice_files_html(file_hash, input_dir, output_filename):
     # Output the individual notice file lists
     print >>output_file, '<table cellpadding="0" cellspacing="0" border="0">'
     for value in file_hash:
-        print >> output_file, '<tr id="id%d"><td class="same-license">' % id_table.get(value[0])
-        print >> output_file, '<div class="label">Notices for file(s):</div>'
-        print >> output_file, '<div class="file-list">'
+        print('<tr id="id%d"><td class="same-license">' % id_table.get(value[0]), file=output_file)
+        print('<div class="label">Notices for file(s):</div>', file=output_file)
+        print('<div class="file-list">', file=output_file)
         for filename in value:
-            print >> output_file, "%s <br/>" % (SRC_DIR_STRIP_RE.sub(r"\1", filename))
-        print >> output_file, "</div><!-- file-list -->"
-        print >> output_file
-        print >> output_file, '<pre class="license-text">'
-        print >> output_file, html_escape(open(value[0]).read())
-        print >> output_file, "</pre><!-- license-text -->"
-        print >> output_file, "</td></tr><!-- same-license -->"
-        print >> output_file
-        print >> output_file
-        print >> output_file
+            print("%s <br/>" % (SRC_DIR_STRIP_RE.sub(r"\1", filename)), file=output_file)
+        print("</div><!-- file-list -->", file=output_file)
+        print(file=output_file)
+        print('<pre class="license-text">', file=output_file)
+        print(html_escape(open(value[0]).read()), file=output_file)
+        print("</pre><!-- license-text -->", file=output_file)
+        print("</td></tr><!-- same-license -->", file=output_file)
+        print(file=output_file)
+        print(file=output_file)
+        print(file=output_file)
 
     # Finish off the file output
     print >> output_file, "</table>"
@@ -155,12 +155,12 @@ def combine_notice_files_text(file_hash, input_dir, output_filename, file_title)
     output_file = open(output_filename, "wb")
     print >> output_file, file_title
     for value in file_hash:
-      print >> output_file, "============================================================"
-      print >> output_file, "Notices for file(s):"
+      print("============================================================", file=output_file)
+      print("Notices for file(s):", file=output_file)
       for filename in value:
-        print >> output_file, SRC_DIR_STRIP_RE.sub(r"\1", filename)
-      print >> output_file, "------------------------------------------------------------"
-      print >> output_file, open(value[0]).read()
+        print(SRC_DIR_STRIP_RE.sub(r"\1", filename), file=output_file)
+      print("------------------------------------------------------------", file=output_file)
+      print(open(value[0]).read(), file=output_file)
     output_file.close()
 
 def main(args):

@@ -554,7 +554,7 @@ ifeq ($(TARGET_BOOTIMAGE_USE_EXT2),true)
 $(error TARGET_BOOTIMAGE_USE_EXT2 is not supported anymore)
 else ifeq (true,$(PRODUCTS.$(INTERNAL_PRODUCT).PRODUCT_SUPPORTS_BOOT_SIGNER)) # TARGET_BOOTIMAGE_USE_EXT2 != true
 
-$(INSTALLED_BOOTIMAGE_TARGET): $(MKBOOTIMG) $(INTERNAL_BOOTIMAGE_FILES) $(BOOT_SIGNER) $(BOOTIMAGE_EXTRA_DEPS)
+$(INSTALLED_BOOTIMAGE_TARGET): $(MKBOOTIMG) $(INTERNAL_BOOTIMAGE_FILES) $(BOOT_SIGNER)
 	$(call pretty,"Target boot image: $@")
 	$(hide) $(MKBOOTIMG) $(INTERNAL_BOOTIMAGE_ARGS) $(INTERNAL_MKBOOTIMG_VERSION_ARGS) $(BOARD_MKBOOTIMG_ARGS) --output $@
 	$(BOOT_SIGNER) /boot $@ $(PRODUCTS.$(INTERNAL_PRODUCT).PRODUCT_VERITY_SIGNING_KEY).pk8 $(PRODUCTS.$(INTERNAL_PRODUCT).PRODUCT_VERITY_SIGNING_KEY).x509.pem $@
@@ -596,7 +596,7 @@ bootimage-nodeps: $(MKBOOTIMG)
 	$(hide) $(call assert-max-image-size,$(INSTALLED_BOOTIMAGE_TARGET),$(BOARD_BOOTIMAGE_PARTITION_SIZE))
 
 endif # TARGET_BOOTIMAGE_USE_EXT2
-endif # BOARD_USES_RECOVERY_AS_BOOT
+endif # BOARD_USES_RECOVERY_AS_BOO
 
 else	# TARGET_NO_KERNEL
 # HACK: The top-level targets depend on the bootimage.  Not all targets
@@ -874,27 +874,27 @@ INTERNAL_RECOVERYIMAGE_FILES := $(filter $(TARGET_RECOVERY_OUT)/%, \
 ifneq ($(TARGET_RECOVERY_INITRC),)
   recovery_initrc := $(TARGET_RECOVERY_INITRC) # Use target specific init.rc
 else
-  recovery_initrc := $(call project-path-for, recovery)/etc/init.rc
+  recovery_initrc := $(call include-path-for, recovery)/etc/init.rc
 endif
 recovery_sepolicy := $(call intermediates-dir-for,ETC,sepolicy.recovery)/sepolicy.recovery
-recovery_kernel := $(INSTALLED_KERNEL_TARGET) # same as a non-recovery system
+ifneq ($(TARGET_PREBUILT_RECOVERY_KERNEL),)
+  recovery_kernel := $(TARGET_PREBUILT_RECOVERY_KERNEL) # Use prebuilt recovery kernel
+else
+  recovery_kernel := $(INSTALLED_KERNEL_TARGET) # same as a non-recovery system
+endif
+recovery_uncompressed_ramdisk := $(PRODUCT_OUT)/ramdisk-recovery.cpio
 recovery_ramdisk := $(PRODUCT_OUT)/ramdisk-recovery.img
 recovery_build_prop := $(intermediate_system_build_prop)
-recovery_uncompressed_ramdisk := $(PRODUCT_OUT)/ramdisk-recovery.cpio
-recovery_resources_common := $(call project-path-for,recovery)/res
+recovery_resources_common := $(call include-path-for, recovery)/res
 
 # Set recovery_density to the density bucket of the device.
 recovery_density := unknown
-ifneq (,$(TARGET_RECOVERY_DENSITY))
-recovery_density := $(filter %dpi,$(TARGET_RECOVERY_DENSITY))
-else
 ifneq (,$(PRODUCT_AAPT_PREF_CONFIG))
 # If PRODUCT_AAPT_PREF_CONFIG includes a dpi bucket, then use that value.
 recovery_density := $(filter %dpi,$(PRODUCT_AAPT_PREF_CONFIG))
 else
 # Otherwise, use the default medium density.
 recovery_densities := mdpi
-endif
 endif
 
 ifneq (,$(wildcard $(recovery_resources_common)-$(recovery_density)))
@@ -909,9 +909,9 @@ endif
 # its private recovery resources.
 
 ifneq (,$(filter xxxhdpi 560dpi xxhdpi 400dpi xhdpi,$(recovery_density)))
-recovery_font := $(call project-path-for,recovery)/fonts/18x32.png
+recovery_font := $(call include-path-for, recovery)/fonts/18x32.png
 else
-recovery_font := $(call project-path-for,recovery)/fonts/12x22.png
+recovery_font := $(call include-path-for, recovery)/fonts/12x22.png
 endif
 
 ifndef TARGET_PRIVATE_RES_DIRS
@@ -959,11 +959,6 @@ INTERNAL_RECOVERYIMAGE_ARGS := \
 
 # Assumes this has already been stripped
 ifdef BOARD_KERNEL_CMDLINE
-  ifdef BUILD_ENFORCE_SELINUX
-      ifneq (,$(filter androidboot.selinux=permissive androidboot.selinux=disabled, $(BOARD_KERNEL_CMDLINE)))
-          $(error "Trying to apply non-default selinux settings. Aborting")
-      endif
-  endif
   INTERNAL_RECOVERYIMAGE_ARGS += --cmdline "$(BOARD_KERNEL_CMDLINE)"
 endif
 ifdef BOARD_KERNEL_BASE
@@ -983,15 +978,6 @@ INTERNAL_RECOVERY_FILES := $(filter $(TARGET_RECOVERY_OUT)/%, \
 # substitute other keys for this one.
 OTA_PUBLIC_KEYS := $(DEFAULT_SYSTEM_DEV_CERTIFICATE).x509.pem
 
-ifneq ($(OTA_PACKAGE_SIGNING_KEY),)
-    OTA_PUBLIC_KEYS := $(OTA_PACKAGE_SIGNING_KEY).x509.pem
-    PRODUCT_EXTRA_RECOVERY_KEYS := $(DEFAULT_SYSTEM_DEV_CERTIFICATE)
-else
-    PRODUCT_EXTRA_RECOVERY_KEYS += \
-        build/target/product/security/xpe \
-        build/target/product/security/xpe-devkey
-endif
-
 # Generate a file containing the keys that will be read by the
 # recovery binary.
 RECOVERY_INSTALL_OTA_KEYS := \
@@ -1006,12 +992,13 @@ $(RECOVERY_INSTALL_OTA_KEYS): $(OTA_PUBLIC_KEYS) $(DUMPKEY_JAR) $(extra_keys)
 	java -jar $(DUMPKEY_JAR) $(PRIVATE_OTA_PUBLIC_KEYS) $(extra_keys) > $@
 
 RECOVERYIMAGE_ID_FILE := $(PRODUCT_OUT)/recovery.id
-define build-recoveryramdisk
-  @echo ----- Making recovery ramdisk ------
+# $(1): output file
+define build-recoveryimage-target
+  @echo ----- Making recovery filesystem ------
   $(hide) mkdir -p $(TARGET_RECOVERY_ROOT_OUT)/etc $(TARGET_RECOVERY_ROOT_OUT)/sdcard $(TARGET_RECOVERY_ROOT_OUT)/tmp
-  @echo "Copying baseline ramdisk..."
-  $(hide) rsync -a --exclude=etc --exclude=sdcard --exclude=vendor $(TARGET_ROOT_OUT) $(TARGET_RECOVERY_OUT) # "cp -Rf" fails to overwrite broken symlinks on Mac.
-  @echo "Modifying ramdisk contents..."
+  @echo Copying baseline ramdisk...
+  $(hide) rsync -a --exclude=etc --exclude=sdcard $(TARGET_ROOT_OUT) $(TARGET_RECOVERY_OUT) # "cp -Rf" fails to overwrite broken symlinks on Mac.
+  @echo Modifying ramdisk contents...
   $(hide) rm -f $(TARGET_RECOVERY_ROOT_OUT)/init*.rc
   $(hide) cp -f $(recovery_initrc) $(TARGET_RECOVERY_ROOT_OUT)/
   $(hide) rm -f $(TARGET_RECOVERY_ROOT_OUT)/sepolicy
@@ -1036,44 +1023,41 @@ define build-recoveryramdisk
     $(hide) mkdir -p $(TARGET_RECOVERY_ROOT_OUT)/system_root; \
             rm -rf $(TARGET_RECOVERY_ROOT_OUT)/system; \
             ln -sf /system_root/system $(TARGET_RECOVERY_ROOT_OUT)/system) # Mount the system_root_image to /system_root and symlink /system.
-endef
 
-# $(1): output file
-define build-recoveryimage-target
-  $(if $(filter true,$(PRODUCTS.$(INTERNAL_PRODUCT).PRODUCT_SUPPORTS_VBOOT)), \
-    $(hide) $(MKBOOTIMG) $(INTERNAL_RECOVERYIMAGE_ARGS) $(INTERNAL_MKBOOTIMG_VERSION_ARGS) $(BOARD_MKBOOTIMG_ARGS) --output $(1).unsigned, \
-    $(hide) $(MKBOOTIMG) $(INTERNAL_RECOVERYIMAGE_ARGS) $(INTERNAL_MKBOOTIMG_VERSION_ARGS) $(BOARD_MKBOOTIMG_ARGS) --output $(1) --id > $(RECOVERYIMAGE_ID_FILE))
-  $(if $(filter true,$(PRODUCTS.$(INTERNAL_PRODUCT).PRODUCT_SUPPORTS_BOOT_SIGNER)),\
-    $(BOOT_SIGNER) /recovery $(1) $(PRODUCTS.$(INTERNAL_PRODUCT).PRODUCT_VERITY_SIGNING_KEY).pk8 $(PRODUCTS.$(INTERNAL_PRODUCT).PRODUCT_VERITY_SIGNING_KEY).x509.pem $(1))
-  $(if $(filter true,$(PRODUCTS.$(INTERNAL_PRODUCT).PRODUCT_SUPPORTS_VBOOT)), \
-    $(VBOOT_SIGNER) $(FUTILITY) $(1).unsigned $(PRODUCTS.$(INTERNAL_PRODUCT).PRODUCT_VBOOT_SIGNING_KEY).vbpubk $(PRODUCTS.$(INTERNAL_PRODUCT).PRODUCT_VBOOT_SIGNING_KEY).vbprivk $(PRODUCTS.$(INTERNAL_PRODUCT).PRODUCT_VBOOT_SIGNING_SUBKEY).vbprivk $(1).keyblock $(1))
-  $(if $(filter true,BOARD_USES_RECOVERY_AS_BOOT), \
-    $(hide) $(call assert-max-image-size,$(1),$(BOARD_BOOTIMAGE_PARTITION_SIZE)), \
-    $(hide) $(call assert-max-image-size,$(1),$(BOARD_RECOVERYIMAGE_PARTITION_SIZE)))
+  @echo ----- Made recovery filesystem -------- $(TARGET_RECOVERY_ROOT_OUT)
+  @touch $(TARGET_RECOVERY_ROOT_TIMESTAMP)
 endef
 
 $(recovery_uncompressed_ramdisk): $(MKBOOTFS) \
-		$(INSTALLED_BOOTIMAGE_TARGET) \
-		$(INTERNAL_RECOVERYIMAGE_FILES) \
-		$(recovery_initrc) $(recovery_sepolicy) $(recovery_kernel) \
-		$(INSTALLED_2NDBOOTLOADER_TARGET) \
-		$(recovery_build_prop) $(recovery_resource_deps) $(recovery_root_deps) \
-		$(recovery_fstab) \
-		$(RECOVERY_INSTALL_OTA_KEYS)
-		$(call build-recoveryramdisk)
-		@echo ----- Making uncompressed recovery ramdisk ------
-		$(hide) $(MKBOOTFS) $(TARGET_RECOVERY_ROOT_OUT) > $@
+        $(INSTALLED_BOOTIMAGE_TARGET) \
+        $(INTERNAL_RECOVERYIMAGE_FILES) \
+        $(recovery_initrc) $(recovery_sepolicy) $(recovery_kernel) \
+        $(INSTALLED_2NDBOOTLOADER_TARGET) \
+        $(recovery_build_prop) $(recovery_resource_deps) $(recovery_root_deps) \
+        $(recovery_fstab) \
+        $(RECOVERY_INSTALL_OTA_KEYS)
+    $(call build-recoveryimage-target, $@)
+    @echo ----- Making uncompressed recovery ramdisk ------
+    $(hide) $(MKBOOTFS) $(TARGET_RECOVERY_ROOT_OUT) > $@
 
-$(recovery_ramdisk): $(MINIGZIP) \
-		$(recovery_uncompressed_ramdisk)
-	@echo ----- Making compressed recovery ramdisk ------
-	$(hide) $(MINIGZIP) < $(recovery_uncompressed_ramdisk) > $@
+$(recovery_ramdisk): $(MKBOOTFS) \
+        $(recovery_uncompressed_ramdisk)
+        @echo ----- Making compressed recovery ramdisk ------
+        $(hide) $(MINIGZIP) < $(recovery_uncompressed_ramdisk) > $@
 
 ifndef BOARD_CUSTOM_BOOTIMG_MK
 $(INSTALLED_RECOVERYIMAGE_TARGET): $(recovery_ramdisk) $(MKBOOTIMG) $(recovery_kernel)
-	@echo ----- Making recovery image ------
-	$(call build-recoveryimage-target, $@)
-	@echo ----- Made recovery image: $@ --------
+        @echo ----- Making recovery image ------
+        $(hide) $(MKBOOTIMG) $(INTERNAL_RECOVERYIMAGE_ARGS) $(BOARD_MKBOOTIMG_ARGS) --output $@
+        $(if $(filter true,$(PRODUCTS.$(INTERNAL_PRODUCT).PRODUCT_SUPPORTS_VBOOT)), \
+                $(hide) $(MKBOOTIMG) $(INTERNAL_RECOVERYIMAGE_ARGS) $(BOARD_MKBOOTIMG_ARGS) --output $(1).unsigned, \
+                $(hide) $(MKBOOTIMG) $(INTERNAL_RECOVERYIMAGE_ARGS) $(BOARD_MKBOOTIMG_ARGS) --output $(1) --id > $(RECOVERYIMAGE_ID_FILE))
+        $(if $(filter true,$(PRODUCTS.$(INTERNAL_PRODUCT).PRODUCT_SUPPORTS_BOOT_SIGNER)),\
+                $(BOOT_SIGNER) /recovery $(1) $(PRODUCTS.$(INTERNAL_PRODUCT).PRODUCT_VERITY_SIGNING_KEY).pk8 $(PRODUCTS.$(INTERNAL_PRODUCT).PRODUCT_VERITY_SIGNING_KEY).x509.pem $(1))
+        $(if $(filter true,$(PRODUCTS.$(INTERNAL_PRODUCT).PRODUCT_SUPPORTS_VBOOT)), \
+                $(VBOOT_SIGNER) $(FUTILITY) $(1).unsigned $(PRODUCTS.$(INTERNAL_PRODUCT).PRODUCT_VBOOT_SIGNING_KEY).vbpubk $(PRODUCTS.$(INTERNAL_PRODUCT).PRODUCT_VBOOT_SIGNING_KEY).vbprivk $(1).keyblock $(1))
+        $(hide) $(call assert-max-image-size,$(1),$(BOARD_RECOVERYIMAGE_PARTITION_SIZE))
+        @echo ----- Made recovery image: $@ --------
 endif
 
 ifeq ($(BOARD_USES_RECOVERY_AS_BOOT),true)
@@ -1105,9 +1089,6 @@ endif
 .PHONY: recoveryimage-nodeps
 recoveryimage-nodeps:
 	@echo "make $@: ignoring dependencies"
-	$(call build-recoveryramdisk)
-	$(hide) $(MKBOOTFS) $(TARGET_RECOVERY_ROOT_OUT) > $(recovery_uncompressed_ramdisk)
-	$(hide) $(MINIGZIP) < $(recovery_uncompressed_ramdisk) > $(recovery_ramdisk)
 	$(call build-recoveryimage-target, $(INSTALLED_RECOVERYIMAGE_TARGET))
 
 else # INSTALLED_RECOVERYIMAGE_TARGET not defined

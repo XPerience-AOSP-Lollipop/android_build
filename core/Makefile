@@ -2147,8 +2147,26 @@ bacon: otapackage
 	$(hide) ln -f $(INTERNAL_OTA_PACKAGE_TARGET) $(XPE_TARGET_PACKAGE)
 	$(hide) $(MD5SUM) $(XPE_TARGET_PACKAGE) > $(XPE_TARGET_PACKAGE).md5sum
 	#@echo "Package Complete: $(XPE_TARGET_PACKAGE)"
-	@echo "Running releasetool"
-	$(hide) ./vendor/XPe/tools/squisher_xpe
+	$(hide) ./vendor/XPe/tools/colors
+	@echo -e $CL_RED"  ▀████    ▐████▀    ▄███████▄    ▄████████    ▄████████  ▄█     ▄████████ ███▄▄▄▄    ▄████████    ▄████████"$CL_RED
+	@echo -e $CL_RED"    ███▌   ████▀    ███    ███   ███    ███   ███    ███ ███    ███    ███ ███▀▀▀██▄ ███    ███   ███    ███"$CL_RED
+	@echo -e $CL_RED"     ███  ▐███      ███    ███   ███    █▀    ███    ███ ███▌   ███    █▀  ███   ███ ███    █▀    ███    █▀ "$CL_RED
+	@echo -e $CL_RED"     ▀███▄███▀      ███    ███  ▄███▄▄▄      ▄███▄▄▄▄██▀ ███▌  ▄███▄▄▄     ███   ███ ███         ▄███▄▄▄    "$CL_RED
+	@echo -e $CL_RED"     ████▀██▄     ▀█████████▀  ▀▀███▀▀▀     ▀▀███▀▀▀▀▀   ███▌ ▀▀███▀▀▀     ███   ███ ███        ▀▀███▀▀▀    "$CL_RED
+	@echo -e $CL_RED"    ▐███  ▀███      ███          ███    █▄  ▀███████████ ███    ███    █▄  ███   ███ ███    █▄    ███    █▄ "$CL_RED
+	@echo -e $CL_RED"   ▄███     ███▄    ███          ███    ███   ███    ███ ███    ███    ███ ███   ███ ███    ███   ███    ███"$CL_RED
+	@echo -e $CL_RED"  ████       ███▄  ▄████▀        ██████████   ███    ███ █▀     ██████████  ▀█   █▀  ████████▀    ██████████"$CL_RED
+	@echo -e $CL_RED"                                              ███    ███                                                    "$CL_RED
+	@echo -e $CL_CYN""$CL_RST
+	@echo -e $CL_CYN"            					  Build completed! Now Flash that Rom and ENJOY!!       					 "$CL_RST  
+	@echo -e $CL_RED"============================================================================================================"$CL_RED 
+	@echo -e $CL_RED"============================================================================================================"$CL_RED
+	
+	@echo -e $CL_CYN"==================================-Package complete-=================================="$CL_RST
+	@echo -e $CL_CYN"zip:"$CL_MAG" $(XPE_TARGET_PACKAGE) "$CL_RST
+	@echo -e $CL_CYN"md5:"$CL_MAG" $(cat $(XPE_TARGET_PACKAGE).md5sum | awk '{ print $1 }')"$CL_RST
+	@echo -e $CL_CYN"size:"$CL_MAG" $(ls -lah $$OUT | awk '{ print $5}') ($(ls -la $OUT | awk '{ print $5}'))"$CL_RST
+	@echo -e $CL_CYN"======================================================================================"$CL_RST
 
 endif    # build_oat_package
 

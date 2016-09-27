@@ -2146,7 +2146,9 @@ otapackage: $(INTERNAL_OTA_PACKAGE_TARGET)
 bacon: otapackage
 	$(hide) ln -f $(INTERNAL_OTA_PACKAGE_TARGET) $(XPE_TARGET_PACKAGE)
 	$(hide) $(MD5SUM) $(XPE_TARGET_PACKAGE) > $(XPE_TARGET_PACKAGE).md5sum
-	@echo "Package Complete: $(XPE_TARGET_PACKAGE)"
+	#@echo "Package Complete: $(XPE_TARGET_PACKAGE)"
+	@echo "Running releasetool"
+	$(hide) ./vendor/XPe/tools/squisher_xpe
 
 endif    # build_oat_package
 

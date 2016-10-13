@@ -2166,6 +2166,9 @@ bacon: otapackage
 	@echo -e "=====================================-Package complete-====================================================="
 	@echo -e "zip: ""$(XPE_VERSION).zip "
 	@echo -e "============================================================================================================"
+	#Generate Changelog
+	$(hide) ./vendor/XPe/tools/changelog
+	$(hide) mv $(PRODUCT_OUT)/Changelog.txt $(PRODUCT_OUT)/$(XPE_VERSION)-$(TARGET_PRODUCT).txt
 
 endif    # build_oat_package
 

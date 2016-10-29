@@ -135,7 +135,6 @@ Usage:  ota_from_target_files [flags] input_target_files output_ota_package
 
   --payload_signer_args <args>
       Specify the arguments needed for payload signer.
->>>>>>> android-7.1.0_r4
 """
 
 from __future__ import print_function
@@ -704,7 +703,7 @@ else if get_stage("%(bcb_dev)s") == "3/3" then
   script.Print("#      (C)2016 The XPerience Project         #");
   script.Print("#              By Klozz Jesus                #");
   script.Print("##############################################");
-
+  
   build2 = GetBuildProp("ro.build.date", OPTIONS.info_dict)
   script.Print("#   Compiled: %s   #"%(build2));
   device = GetBuildProp("ro.xpe.device", OPTIONS.info_dict)
@@ -713,11 +712,11 @@ else if get_stage("%(bcb_dev)s") == "3/3" then
     script.Print("*   Device: %s (%s)                    #"%(model, device));
     script.Print("##############################################");
   else:
-    script.Print("*   Device: %s"%(device));
+    script.Print("#   Device: %s"%(device));
     script.Print("##############################################");
 
-    # Place a copy of file_contexts.bin into the OTA package which will be used
-    # by the recovery program.
+  # Place a copy of file_contexts.bin into the OTA package which will be used
+  # by the recovery program.
   if "selinux_fc" in OPTIONS.info_dict:
     WritePolicyConfig(OPTIONS.info_dict["selinux_fc"], output_zip)
 

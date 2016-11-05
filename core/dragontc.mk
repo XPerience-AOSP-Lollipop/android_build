@@ -13,15 +13,15 @@
 # limitations under the License.
 
 # Set Bluetooth Modules
-BLUETOOTH := libbluetooth_jni bluetooth.mapsapi bluetooth.default bluetooth.mapsapi libbt-brcm_stack audio.a2dp.default libbt-brcm_gki libbt-utils libbt-qcom_sbc_decoder libbt-brcm_bta libbt-brcm_stack libbt-vendor libbtprofile libbtdevice libbtcore bdt bdtest libbt-hci libosi ositests libbluetooth_jni net_test_osi net_test_device net_test_btcore net_bdtool net_hci bdAddrLoader
+BLUETOOTH := libbluetooth_jni bluetooth.mapsapi bluetooth.default bluetooth.mapsapi libbt-brcm_stack audio.a2dp.default libbt-brcm_gki libbt-utils libbt-qcom_sbc_decoder libbt-brcm_bta libbt-brcm_stack libbt-vendor libbtprofile libbtdevice libbtcore bdt bdtest libbt-hci libosi ositests libbluetooth_jni net_test_osi net_test_device net_test_btcore net_bdtool net_hci bdAddrLoader libbt-ta libbt-stack
 
 #######################
 ##  D R A G O N T C  ##
 #######################
 
 # Disable modules that don't work with DragonTC. Split up by arch.
-DISABLE_DTC_arm := libcrypto libcrypto_static libext2fs
-DISABLE_DTC_arm64 :=
+DISABLE_DTC_arm := libcrypto libcrypto_static libext2fs libjpeg  libjpeg_static libwebp-decode libwebp-encode libskia_static mmc_utils libpdfiumcore libpdfiumfpdfapi libpdfiumfxge libpdfiumlcms libpdfiumopenjpeg libpdfium  libpdfiumpdfwindow libbnnmlowpV8 libopus libsonic dumpsys
+DISABLE_DTC_arm64 := libcrypto libcrypto_static libext2fs libjpeg  libjpeg_static libwebp-decode libwebp-encode libskia_static mmc_utils libpdfiumfpdfapi libpdfiumfxge libpdfiumlcms libpdfiumopenjpeg libpdfium
 
 # Set DISABLE_DTC based on arch
 DISABLE_DTC := \
@@ -88,7 +88,22 @@ endif
 
 # Disable modules that dont work with Polly. Split up by arch.
 DISABLE_POLLY_arm := \
+  busybox \
   libpng \
+  libpdfiumcore \
+  libpdfiumfpdfapi \
+  libpdfiumfxge \
+  libpdfiumlcms \
+  libpdfiumopenjpeg \
+  libpdfium \
+  libpdfiumpdfwindow \
+  libRS_internal \
+  libhwui \
+  libhwui_static \
+  libbt-bta \
+  libvpx \
+  libaudioflinger \
+  libRSSupport \
   libLLVMCodeGen \
   libLLVMARMCodeGen\
   libLLVMScalarOpts \

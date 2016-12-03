@@ -176,9 +176,11 @@ def get_from_github(device):
             sys.exit()
 
         for res in result['items']:
-            if (res['name'].startswith("device_") and res['name'].endswith("_%s" % device)):
+            if (res['name'].startswith("android_device_") and res['name'].endswith("_%s" % device)):
                 print("Found %s" % res['name'])
-                devicepath = res['name'].replace("android_","") and res['name'].replace("_","/")
+                manufacturer = res['name'].replace("android_device_", "").replace("_" + device, "")
+                devicepath = "device/%s/%s" % (manufacturer, device)
+                #devicepath = res['name'].replace("android_","") and res['name'].replace("_","/")
                 if add_to_local_manifest(devicepath, res['full_name'], "xpe"):
                     reposync(res['full_name'])
                 break

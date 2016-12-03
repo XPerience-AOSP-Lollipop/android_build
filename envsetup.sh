@@ -683,19 +683,18 @@ function lunch()
     fi
 
     local product=$(echo -n $selection | sed -e "s/-.*$//")
+    local device=$(echo -n $product | sed -e "s/.*xpe_//")
     check_product $product
     if [ $? -ne 0 ]
     then
         # if we can't find a product, try to grab it off the CM github
         T=$(gettop)
         pushd $T > /dev/null
-        build/tools/rainbowunicorn.py $product
-        build/tools/roomservice.py $product
+        uild/tools/roomservice.py $device
         popd > /dev/null
         check_product $product
     else
-        build/tools/rainbowunicorn.py $product true
-        build/tools/roomservice.py $product true
+        uild/tools/roomservice.py $device
     fi
     TARGET_PRODUCT=$product \
     TARGET_BUILD_VARIANT=$variant \

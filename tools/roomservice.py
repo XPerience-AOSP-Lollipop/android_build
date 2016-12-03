@@ -120,7 +120,7 @@ def is_path_in_manifest(checkpath, name, remote, branch):
             return True
 
 def reposync(syncrepo):
-    os.system('repo sync --force-sync %s' % syncrepo)
+    os.system('repo sync --force-sync --no-tags --current-branch --no-clone-bundle %s' % syncrepo)
 
 
 def add_to_local_manifest(path, name, remote, branch=None):
@@ -176,9 +176,9 @@ def get_from_github(device):
             sys.exit()
 
         for res in result['items']:
-            if (res['name'].startswith("android_device_") and res['name'].endswith("_%s" % device)):
+            if (res['name'].startswith("device_") and res['name'].endswith("_%s" % device)):
                 print("Found %s" % res['name'])
-                devicepath = res['name'].replace("_","/").replace("android_","")
+                devicepath = res['name'].replace("android_","") and res['name'].replace("_","/")
                 if add_to_local_manifest(devicepath, res['full_name'], "xpe"):
                     reposync(res['full_name'])
                 break

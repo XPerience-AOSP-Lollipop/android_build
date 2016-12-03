@@ -690,11 +690,11 @@ function lunch()
         # if we can't find a product, try to grab it off the CM github
         T=$(gettop)
         pushd $T > /dev/null
-        uild/tools/roomservice.py $device
+        build/tools/roomservice.py $device
         popd > /dev/null
         check_product $product
     else
-        uild/tools/roomservice.py $device
+        build/tools/roomservice.py $device
     fi
     TARGET_PRODUCT=$product \
     TARGET_BUILD_VARIANT=$variant \
@@ -2221,7 +2221,7 @@ function mka() {
                 make -C $T -j `sysctl hw.ncpu|cut -d" " -f2` "$@"
                 ;;
             *)
-                mk_timer schedtool -B -n 1 -e ionice -n 1 make -C $T -j$(cat /proc/cpuinfo | grep "^processor" | wc -l) "$@"
+                mk_timer schedtool -B -n 10 -e ionice -n 7 make -C $T -j$(cat /proc/cpuinfo | grep "^processor" | wc -l) "$@"
                 ;;
         esac
 

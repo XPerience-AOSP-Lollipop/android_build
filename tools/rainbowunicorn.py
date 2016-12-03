@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-# Copyright (C) 2012-2013, The CyanogenMod Project
+# Copyright (C) 2011-2016 The XPerience Project
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -175,12 +175,12 @@ def add_to_manifest(repositories, fallback_branch = None):
         repo_target = repository['target_path']
         print('Checking if %s is fetched from %s' % (repo_target, repo_name))
         if is_in_manifest(repo_target):
-            print('CyanogenMod/%s already fetched to %s' % (repo_name, repo_target))
+            print('XPerience/%s already fetched to %s' % (repo_name, repo_target))
             continue
 
-        print('Adding dependency: CyanogenMod/%s -> %s' % (repo_name, repo_target))
+        print('Adding dependency: XPerience/%s -> %s' % (repo_name, repo_target))
         project = ElementTree.Element("project", attrib = { "path": repo_target,
-            "remote": "cm", "name": "CyanogenMod/%s" % repo_name })
+            "remote": "xpe", "name": "XPerience-AOSP-Lollipop/%s" % repo_name })
 
         if 'branch' in repository:
             project.set('revision',repository['branch'])
@@ -225,7 +225,7 @@ def fetch_dependencies(repo_path, fallback_branch = None):
             print('Adding dependencies to manifest')
             add_to_manifest(fetch_list, fallback_branch)
     else:
-        print('CM: Dependencies file not found, bailing out at ' + dependencies_path)
+        print('Dependencies file not found, bailing out.')
 
     if len(syncable_repos) > 0:
         print('Syncing dependencies')
@@ -242,7 +242,7 @@ if depsonly:
     if repo_path:
         fetch_dependencies(repo_path)
     else:
-        print("CM: Trying dependencies-only mode on a non-existing device tree?")
+        print("Trying dependencies-only mode on a non-existing device tree?")
 
     sys.exit()
 

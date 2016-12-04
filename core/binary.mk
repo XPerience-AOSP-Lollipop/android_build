@@ -267,6 +267,7 @@ ifeq ($(SDCLANG),true)
             my_sdclang := true
         endif
     endif
+endif
 
 # Include DragonTC Optimizations
 ifneq ($(DISABLE_DTC_OPTS),true)

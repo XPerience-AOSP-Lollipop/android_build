@@ -1546,6 +1546,8 @@ $(INSTALLED_USERDATATARBALL_TARGET): PRIVATE_USERDATA_TAR := $(userdata_tar)
 $(INSTALLED_USERDATATARBALL_TARGET): $(FS_GET_STATS) $(INTERNAL_USERDATAIMAGE_FILES)
 	$(build-userdatatarball-target)
 
+$(call dist-for-goals,userdatatarball,$(INSTALLED_USERDATATARBALL_TARGET))
+
 .PHONY: userdatatarball-nodeps
 userdatatarball-nodeps: $(FS_GET_STATS)
 	$(build-userdatatarball-target)
@@ -2132,6 +2134,7 @@ ifdef PRODUCT_DEFAULT_DEV_CERTIFICATE
 else
 	$(hide) build/tools/getb64key.py $(DEFAULT_SYSTEM_DEV_CERTIFICATE).x509.pem > $(zip_root)/META/releasekey.txt
 endif
+
 ifdef BOARD_PREBUILT_VENDORIMAGE
 	$(hide) mkdir -p $(zip_root)/IMAGES
 	$(hide) cp $(INSTALLED_VENDORIMAGE_TARGET) $(zip_root)/IMAGES/
@@ -2393,7 +2396,7 @@ PROGUARD_DICT_ZIP := $(PRODUCT_OUT)/$(TARGET_PRODUCT)-proguard-dict-$(FILE_NAME_
 # the dependency will be set up later in build/core/main.mk.
 $(PROGUARD_DICT_ZIP) :
 	@echo "Packaging Proguard obfuscation dictionary files."
-	$(hide) dict_files=`find $(TARGET_OUT_COMMON_INTERMEDIATES)/APPS -name proguard_dictionary`; \
+	$(hide) dict_files=`find $(TARGET_OUT_COMMON_INTERMEDIATES)/APPS -name proguard_dictionary -o -name jack_dictionary`; \
 		if [ -n "$$dict_files" ]; then \
 		  unobfuscated_jars=$${dict_files//proguard_dictionary/classes.jar}; \
 		  zip -qX $@ $$dict_files $$unobfuscated_jars; \

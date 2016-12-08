@@ -20,8 +20,8 @@ BLUETOOTH := libbluetooth_jni bluetooth.mapsapi bluetooth.default bluetooth.maps
 #######################
 
 # Disable modules that don't work with DragonTC. Split up by arch.
-DISABLE_DTC_arm := 7z lib7z
-DISABLE_DTC_arm64 := 7z lib7z
+DISABLE_DTC_arm := 
+DISABLE_DTC_arm64 := 
 
 # Set DISABLE_DTC based on arch
 DISABLE_DTC := \
@@ -67,6 +67,8 @@ DISABLE_POLLY_arm := \
 libjpeg_static \
 libyuv_static \
 libpcap \
+7z \
+lib7z \
 libjni_snapimageutil \
 libncurses \
 libjni_filtershow \
@@ -184,8 +186,8 @@ endif
 #############
 
 # Disable modules that don't work with Link Time Optimizations. Split up by arch.
-DISABLE_LTO_arm := libLLVMScalarOpts libjni_latinime_common_static libjni_latinime adbd nit libnetd_client libblas 7z
-DISABLE_THINLTO_arm := libart libart-compiler libsigchain 7z
+DISABLE_LTO_arm := libLLVMScalarOpts libjni_latinime_common_static libjni_latinime adbd nit libnetd_client libblas
+DISABLE_THINLTO_arm := libart libart-compiler libsigchain
 DISABLE_LTO_arm64 :=
 DISABLE_THINLTO_arm64 :=
 

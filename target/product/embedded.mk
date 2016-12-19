@@ -97,7 +97,7 @@ PRODUCT_COPY_FILES += \
     system/core/rootdir/ueventd.rc:root/ueventd.rc
     
 ifeq ($(XPERIENCE_IN_ADBLOCK),true)
-	PRODUCT_COPY_FILES += system/core/rootdir/etc/hosts_block:system/etc/hosts
+	PRODUCT_COPY_FILES += system/core/rootdir/adblock/hosts_block:system/etc/hosts
 else
-	PRODUCT_COPY_FILES += system/core/rootdir/etc/hosts:system/etc/hosts
+	PRODUCT_COPY_FILES += system/core/rootdir/adblock/hosts:system/etc/hosts
 endif

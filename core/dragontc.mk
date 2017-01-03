@@ -115,6 +115,21 @@ libmpeg2dec
 
 DISABLE_POLLY_arm64 := \
 libjpeg_static \
+libyuv_static \
+libpcap \
+7z \
+lib7z \
+libjni_snapimageutil \
+libncurses \
+libjni_filtershow \
+libjni_filtershow_filters \
+libswresample \
+libswscale \
+vim \
+libavcodec \
+libbtif \
+libbnnmlowpV8 \
+libRSSupport \
 libicuuc \
 libwebp-decode \
 libwebp-encode \
@@ -133,6 +148,7 @@ libaudioflinger \
 libstagefright% \
 libart \
 libF77blas \
+libF77blasV8 \
 libFFTEm \
 libRSCpuRef \
 libbnnmlowp \

@@ -13,7 +13,7 @@
 # limitations under the License.
 
 # Set Bluetooth Modules
-BLUETOOTH := libbluetooth_jni bluetooth.mapsapi bluetooth.default bluetooth.mapsapi libbt-brcm_stack audio.a2dp.default libbt-brcm_gki libbt-utils libbt-qcom_sbc_decoder libbt-brcm_bta libbt-brcm_stack libbt-vendor libbtprofile libbtdevice libbtcore bdt bdtest libbt-hci libosi ositests libbluetooth_jni net_test_osi net_test_device net_test_btcore net_bdtool net_hci bdAddrLoader libbtif
+BLUETOOTH := libbluetooth_jni bluetooth.mapsapi bluetooth.default bluetooth.mapsapi libbt-brcm_stack audio.a2dp.default libbt-brcm_gki libbt-utils libbt-qcom_sbc_decoder libbt-brcm_bta libbt-brcm_stack libbt-vendor libbtprofile libbtdevice libbtcore bdt bdtest libbt-hci libosi ositests libbluetooth_jni net_test_osi net_test_device net_test_btcore net_bdtool net_hci bdAddrLoader
 
 #######################
 ##  D R A G O N T C  ##
@@ -145,8 +145,7 @@ libwebrtc% \
 libmusicbundle \
 libreverb \
 libscrypt_static \
-libmpeg2dec \
-libntfs-3g_static
+libmpeg2dec
 
 # Set DISABLE_POLLY based on arch
 DISABLE_POLLY := \

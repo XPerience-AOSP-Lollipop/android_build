@@ -269,10 +269,10 @@ ifeq ($(SDCLANG),true)
     endif
 endif
 
-ifeq ($(XPERIENCE_OPTIMIZATION),true)
-          DISABLE_DTC_OPTS := false
-    else
+ifeq ($(XPERIENCE_OPTIMIZATION),false)
           DISABLE_DTC_OPTS := true
+    else
+          DISABLE_DTC_OPTS := false
 endif
 
 # Include DragonTC Optimizations

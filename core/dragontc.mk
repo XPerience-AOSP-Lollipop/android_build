@@ -20,8 +20,8 @@ BLUETOOTH := libbluetooth_jni bluetooth.mapsapi bluetooth.default bluetooth.maps
 #######################
 
 # Disable modules that don't work with DragonTC. Split up by arch.
-DISABLE_DTC_arm := 7z lib7z
-DISABLE_DTC_arm64 := 7z lib7z
+DISABLE_DTC_arm :=
+DISABLE_DTC_arm64 :=
 
 # Set DISABLE_DTC based on arch
 DISABLE_DTC := \
@@ -29,7 +29,7 @@ DISABLE_DTC := \
   $(LOCAL_DISABLE_DTC)
 
 # Enable DragonTC on GCC modules. Split up by arch.
-ENABLE_DTC_arm := 
+ENABLE_DTC_arm :=
 ENABLE_DTC_arm64 :=
 
 # Set ENABLE_DTC based on arch
@@ -65,51 +65,7 @@ POLLY := -O3 -mllvm -polly \
 # Disable modules that dont work with Polly. Split up by arch.
 DISABLE_POLLY_arm := \
 libjpeg_static \
-libyuv_static \
-libpcap \
-libjni_snapimageutil \
-libncurses \
-libjni_filtershow \
-libjni_filtershow_filters \
-libswresample \
-libswscale \
-vim \
-libavcodec \
-libbtif \
-libbnnmlowpV8 \
-libRSSupport \
-libicuuc \
-libwebp-decode \
-libwebp-encode \
-libpdfiumfxge \
-libskia_static \
-libaudioutils \
-libpdfium% \
-libLLVMSupport \
-libsvoxpico \
-libRS_internal \
-libvpx \
-libopus \
-libv8 \
-libsonic \
-libaudioflinger \
-libstagefright% \
-libart \
-libF77blas \
-libF77blasV8 \
-libFFTEm \
-libRSCpuRef \
-libbnnmlowp \
-libmedia_jni \
-libFraunhoferAAC \
-libavcdec \
-libavcenc \
-libmpeg2dec \
-libwebrtc% \
-libmusicbundle \
-libreverb \
-libscrypt_static \
-libmpeg2dec
+libicuuc
 
 DISABLE_POLLY_arm64 := \
 libjpeg_static \
@@ -184,8 +140,8 @@ endif
 #############
 
 # Disable modules that don't work with Link Time Optimizations. Split up by arch.
-DISABLE_LTO_arm := libLLVMScalarOpts libjni_latinime_common_static libjni_latinime adbd nit libnetd_client libblas 7z
-DISABLE_THINLTO_arm := libart libart-compiler libsigchain 7z
+DISABLE_LTO_arm := libLLVMScalarOpts libjni_latinime_common_static libjni_latinime adbd nit libnetd_client libblas
+DISABLE_THINLTO_arm := libart libart-compiler libsigchain
 DISABLE_LTO_arm64 :=
 DISABLE_THINLTO_arm64 :=
 

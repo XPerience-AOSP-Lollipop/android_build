@@ -101,7 +101,7 @@ libopus \
 libv8 \
 libsonic \
 libaudioflinger \
-libstagefright% \
+libstagefright_amrnbdec \
 libart \
 libF77blas \
 libFFTEm \

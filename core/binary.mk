@@ -269,12 +269,6 @@ ifeq ($(SDCLANG),true)
     endif
 endif
 
-ifeq ($(XPERIENCE_OPTIMIZATION),false)
-          DISABLE_DTC_OPTS := true
-    else
-          DISABLE_DTC_OPTS := false
-endif
-
 # Include DragonTC Optimizations
 ifneq ($(DISABLE_DTC_OPTS),true)
   include $(BUILD_SYSTEM)/dragontc.mk

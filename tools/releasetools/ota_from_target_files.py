@@ -693,13 +693,13 @@ else if get_stage("%(bcb_dev)s") == "3/3" then
   script.Print("# \ \/ / _ \ __| _ \_ _| __| \| ((/ __| __|  #");
   script.Print("#  >  <|  _/ _||   /| || _|| .` || (__| _|   #");
   script.Print("# /_/\_\_| |___|_|_\___|___|_|\_| \___|___|  #");
-  Script.Print("#                                            #");
+  script.Print("#                                            #");
   script.Print("#      (C)2017 The XPerience Project         #");
-  Script.Print("#        Making The Best Experience          #");
-  Script.Print("#               Since 2011                   #");
+  script.Print("#        Making The Best Experience          #");
+  script.Print("#               Since 2011                   #");
   script.Print("#             By Klozz Jesus                 #");
   script.Print("##############################################");
-  
+
   build2 = GetBuildProp("ro.build.date", OPTIONS.info_dict)
   script.Print("#   Compiled: %s   #"%(build2));
   device = GetBuildProp("ro.xpe.device", OPTIONS.info_dict)

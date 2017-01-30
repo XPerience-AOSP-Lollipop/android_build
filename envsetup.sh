@@ -2354,15 +2354,17 @@ function dopush()
         rm -f $OUT/.log;return $ret
     fi
 
+    is_gnu_sed=`sed --version | head -1 | grep -c GNU`
+
     # Install: <file>
-    if [ `uname` = "Linux" ]; then
+    if [ $is_gnu_sed -gt 0 ]; then
         LOC="$(cat $OUT/.log | sed -r 's/\x1B\[([0-9]{1,2}(;[0-9]{1,2})?)?[m|K]//g' | grep '^Install: ' | cut -d ':' -f 2)"
     else
         LOC="$(cat $OUT/.log | sed -E "s/"$'\E'"\[([0-9]{1,3}((;[0-9]{1,3})*)?)?[m|K]//g" | grep '^Install: ' | cut -d ':' -f 2)"
     fi
 
     # Copy: <file>
-    if [ `uname` = "Linux" ]; then
+    if [ $is_gnu_sed -gt 0 ]; then
         LOC="$LOC $(cat $OUT/.log | sed -r 's/\x1B\[([0-9]{1,2}(;[0-9]{1,2})?)?[m|K]//g' | grep '^Copy: ' | cut -d ':' -f 2)"
     else
         LOC="$LOC $(cat $OUT/.log | sed -E "s/"$'\E'"\[([0-9]{1,3}((;[0-9]{1,3})*)?)?[m|K]//g" | grep '^Copy: ' | cut -d ':' -f 2)"

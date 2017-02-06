@@ -2276,7 +2276,7 @@ bacon: otapackage
 	@echo -e "============================================================================================================" 
 	@echo -e "                      The XPerience Project. Making the Best Experience since 2011.                         "
 	@echo -e "=====================================-Package complete-====================================================="
-	@echo -e "zip: ""$(XPE_VERSION).zip "
+	@echo -e "zip: ""$(XPE_VERSION).zip " >&2
 	@echo -e "============================================================================================================"
 	#Generate Changelog
 	$(hide) ./vendor/XPe/tools/changelog
@@ -2289,7 +2289,6 @@ bootzip: bootimage
 	   $(recovery_fstab) \
 	   $(OUT) \
 	   $(TARGET_DEVICE)
-
 # -----------------------------------------------------------------
 # The factory package
 

@@ -2258,10 +2258,10 @@ bacon: otapackage
 	@echo -e "  ████       ███▄  ▄████▀        ██████████   ███    ███ █▀     ██████████  ▀█   █▀  ████████▀    ██████████"
 	@echo -e "                                              ███    ███                                                    "
 	@echo -e " "
-	@echo -e "            				 Build completed! Now Flash the Rom and ENJOY!!       			                  "  
+	@echo -e "            			  Build completed! Now Flash the Rom and ENJOY!!       			                  " 
 	@echo -e "============================================================================================================"
-	@echo -e "                      XPerence 11.1.1 are based on Android 7.1.1 developed by Klozz jesus aka TeamMEX 			  "
-	@echo -e "==================================-Package complete-========================================================"
+	@echo -e "                  XPerence 11 are based on Android 7.0 developed by Klozz jesus aka TeamMEX 			  "
+	@echo -e "=====================================-Package complete-====================================================="
 	@echo -e "zip: $(XPE_TARGET_PACKAGE)" >&2
 	@echo -e "============================================================================================================"
 

@@ -357,6 +357,13 @@ endif
 PRODUCT_COPY_FILES := \
     $(strip $(PRODUCTS.$(INTERNAL_PRODUCT).PRODUCT_COPY_FILES))
 
+_boot_animation := $(strip $(lastword $(PRODUCTS.$(INTERNAL_PRODUCT).PRODUCT_BOOTANIMATION)))
+ifneq ($(_boot_animation),)
+PRODUCT_COPY_FILES += \
+    $(_boot_animation):system/media/bootanimation.zip
+endif
+_boot_animation :=
+
 # We might want to skip items listed in PRODUCT_COPY_FILES for
 # various reasons. This is useful for replacing a binary module with one
 # built from source. This should be a list of destination files under $OUT

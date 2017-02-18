@@ -182,10 +182,6 @@ include $(BUILD_SYSTEM)/device.mk
 # A CM build needs only the CM product makefiles.
 ifneq ($(XPE_BUILD),)
   all_product_configs := $(shell find device -path "*/$(XPE_BUILD)/xpe.mk")
-  ifeq ($(all_product_configs),)
-    # Fall back to cm.mk
-    all_product_configs := $(shell find device -path "*/$(XPE_BUILD)/cm.mk")
-  endif
 else
   ifneq ($(strip $(TARGET_BUILD_APPS)),)
   # An unbundled app build needs only the core product makefiles.

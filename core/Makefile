@@ -2236,7 +2236,7 @@ bacon: otapackage
 	$(hide) ln -f $(INTERNAL_OTA_PACKAGE_TARGET) $(XPE_TARGET_PACKAGE)
 	$(hide) $(MD5SUM) $(XPE_TARGET_PACKAGE) | sed "s|$(PRODUCT_OUT)/||" > $(XPE_TARGET_PACKAGE).md5sum
 #	@echo "Package Complete: $(XPE_TARGET_PACKAGE)" >&2
-	$(hide) 
+	$(hide)
 	@echo -e " "
 	@echo -e " "
 	@echo -e "  ▀████    ▐████▀    ▄███████▄    ▄████████    ▄████████  ▄█     ▄████████ ███▄▄▄▄    ▄████████    ▄████████"
@@ -2249,9 +2249,9 @@ bacon: otapackage
 	@echo -e "  ████       ███▄  ▄████▀        ██████████   ███    ███ █▀     ██████████  ▀█   █▀  ████████▀    ██████████"
 	@echo -e "                                              ███    ███                                                    "
 	@echo -e " "
-	@echo -e "            			  Build completed! Now Flash the Rom and ENJOY!!       			                  " 
+	@echo -e "            			  Build completed! Now Flash the Rom and ENJOY!!       			                  "
 	@echo -e "============================================================================================================"
-	@echo -e "                  XPerence 11 are based on Android 7.0 developed by Klozz jesus aka TeamMEX 			  "
+	@echo -e "                  XPerence 11.1.1 are based on Android 7.1.1 developed by Klozz jesus aka TeamMEX 			  "
 	@echo -e "=====================================-Package complete-====================================================="
 	@echo -e "zip: $(XPE_TARGET_PACKAGE)" >&2
 	@echo -e "============================================================================================================"

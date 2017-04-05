@@ -118,6 +118,7 @@ def main(argv):
           if not image.endswith(".img"):
             continue
           if image == "oem.img":
+          if image == "recovery-two-step.img":
             continue
           common.ZipWrite(
               output_zip, os.path.join(images_path, image), image)

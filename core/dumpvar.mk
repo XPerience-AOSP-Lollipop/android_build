@@ -4,6 +4,8 @@ print_build_config_vars := \
   PLATFORM_VERSION_CODENAME \
   PLATFORM_VERSION \
   XPE_VERSION \
+  WITH_XPERIASUPPORT \
+  XPE_BUILDTYPE \
   TARGET_PRODUCT \
   TARGET_BUILD_VARIANT \
   TARGET_BUILD_TYPE \
@@ -24,6 +26,15 @@ print_build_config_vars := \
   HOST_BUILD_TYPE \
   BUILD_ID \
   OUT_DIR
+
+ifneq ($(WITH_XPERIASUPPORT),)
+print_build_config_vars += \
+
+endif
+
+ifneq ($(XPE_BUILDTYPE),)
+endif
+
 
 ifneq ($(RECOVERY_VARIANT),)
 print_build_config_vars += \

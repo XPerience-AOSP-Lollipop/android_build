@@ -74,7 +74,7 @@ FORCE:
 
 # These goals don't need to collect and include Android.mks/CleanSpec.mks
 # in the source tree.
-dont_bother_goals := clean clobber dataclean installclean \
+dont_bother_goals := clean clobber dataclean deviceclean installclean \
     help out \
     snod systemimage-nodeps \
     stnod systemtarball-nodeps \
@@ -1057,15 +1057,6 @@ target-java-tests : java-target-tests
 target-native-tests : native-target-tests
 tests : host-tests target-tests
 
-# To catch more build breakage, check build tests modules in eng and userdebug builds.
-ifneq ($(ANDROID_NO_TEST_CHECK),true)
-ifneq ($(TARGET_BUILD_PDK),true)
-ifneq ($(filter eng userdebug,$(TARGET_BUILD_VARIANT)),)
-droidcore : target-tests host-tests
-endif
-endif
-endif
-
 ifneq (,$(filter samplecode, $(MAKECMDGOALS)))
 .PHONY: samplecode
 sample_MODULES := $(sort $(call get-tagged-modules,samples))
@@ -1092,6 +1083,12 @@ clean:
 
 .PHONY: clobber
 clobber: clean
+
+# Clears out only target files
+.PHONY: deviceclean
+deviceclean:
+	@rm -rf $(OUT_DIR)/target/product/$(TARGET_DEVICE)
+	@echo -e ${CL_GRN}"$(TARGET_DEVICE) files removed successfully"${CL_RST}
 
 # The rules for dataclean and installclean are defined in cleanbuild.mk.
 

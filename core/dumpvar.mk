@@ -26,6 +26,7 @@ print_build_config_vars := \
   HOST_CROSS_2ND_ARCH \
   HOST_BUILD_TYPE \
   BUILD_ID \
+  BUILD_NUMBER \
   OUT_DIR
 
 ifneq ($(WITH_XPERIASUPPORT),)
@@ -35,8 +36,10 @@ endif
 
 ifneq ($(XPE_BUILDTYPE),)
 endif
-
-
+ifeq ($(SDCLANG),true)
+print_build_config_vars += \
+  TARGET_USE_SDCLANG
+endif
 ifneq ($(RECOVERY_VARIANT),)
 print_build_config_vars += \
   RECOVERY_VARIANT

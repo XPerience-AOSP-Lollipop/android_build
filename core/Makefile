@@ -2222,7 +2222,7 @@ $(INTERNAL_OTA_PACKAGE_TARGET): $(BUILT_TARGET_FILES_PACKAGE)
 	   $(if $(OEM_OTA_CONFIG), -o $(OEM_OTA_CONFIG)) \
 	   $(BUILT_TARGET_FILES_PACKAGE) $@
 
-XPE_TARGET_PACKAGE := $(PRODUCT_OUT)/XPerience-$(XPE_VERSION).zip
+XPE_TARGET_PACKAGE := $(PRODUCT_OUT)/XPerience-$(XPE_VERSION)-Final.zip
 
 .PHONY: otapackage bacon
 otapackage: $(INTERNAL_OTA_PACKAGE_TARGET)
@@ -2251,7 +2251,7 @@ bacon: otapackage
 	@echo -e "============================================================================================================"
 	#Generate Changelog
 	$(hide) ./vendor/XPe/tools/changelog
-	$(hide) mv $(PRODUCT_OUT)/Changelog.txt $(PRODUCT_OUT)/$(XPE_VERSION)-$(TARGET_PRODUCT).txt
+	$(hide) mv Changelog.txt $(PRODUCT_OUT)/$(XPE_VERSION)-$(TARGET_PRODUCT).txt
 
 
 endif    # build_ota_package
